@@ -40,6 +40,8 @@ INSTALLED_APPS = [
     'election.apps.ElectionConfig',
 ]
 
+LOGIN_URL='index'
+
 MIDDLEWARE_CLASSES = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',

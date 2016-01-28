@@ -5,7 +5,7 @@
 		<title>Bluejay Voting!</title>
 	</head>
 	<body style="background-color:blue">
-		<a style="font-size:32px;color:black;font-familty:Impact; text-align:center" href="http://127.0.0.1:8000/admin"><strong><em>Admin Login</em></strong></a>
+		<a style="font-size:32px;color:black;font-familty:Impact; text-align:center" href="admin"><strong><em>Admin Login</em></strong></a>
 		{% if questions %}
     		<ul style ="background-color:lightblue">
     			<lin></li>
@@ -15,6 +15,18 @@
     		</ul>
 		{% else %}
     		<p>No polls are available.</p>
+		{% endif %}
+		{% if not user.is_authenticated %}
+			<form action="{% url 'logon_page' %}" method="post">
+				{% csrf_token %}
+			 		   <input type="text" name="username" id="username" 	value="zip" />
+						 <input type='password' name='password' id='password' value='' />
+				<input type="submit" value="login" />
+			</form>
+			{% else %}
+			<a href="{% url 'logout' %}">logout!</a>
+
+
 		{% endif %}
 	</body>
 </html>
