@@ -49,3 +49,7 @@ def logon_page(request):
 def logout_page(request):
     logout(request)
     return HttpResponseRedirect(reverse('index'))
+
+def data_page(request):
+    pass
+    
