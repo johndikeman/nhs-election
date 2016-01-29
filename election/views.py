@@ -41,6 +41,7 @@ def logon_page(request):
     username, password = request.POST['username'],request.POST['password']
     user = authenticate(username=username,password=password)
     if user is not None:
+        print user.student
         login(request,user)
 
     return HttpResponseRedirect(reverse('index'))
@@ -52,4 +53,3 @@ def logout_page(request):
 
 def data_page(request):
     pass
-    
