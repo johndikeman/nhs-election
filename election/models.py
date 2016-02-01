@@ -21,6 +21,7 @@ class Choice(models.Model):
 class Student(models.Model):
     user = models.OneToOneField(User,on_delete=models.CASCADE)
     category = models.CharField(max_length=10,choices=[('band','Band'),('athletics','Athletics'),('debate','Debate'),('art','Art')])
+    answeredQuestions = models.ManyToManyField(Question)
 
     def __str__(self):
         return '%s, in the category %s' % (self.user.username,self.category)

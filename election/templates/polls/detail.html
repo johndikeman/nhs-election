@@ -1,11 +1,10 @@
 <!doctype html>
 <html lang="en">
 <head>
+	<meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
 	{% load staticfiles %}
-	<meta charset="utf-8" />
-	<link rel="icon" type="image/png" href="assets/paper_img/favicon.ico">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-
 	<title>Bluejay voting!</title>
 
 	<meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' name='viewport' />
@@ -28,17 +27,20 @@
 	{% if error_message %}
 		<p><strong>{{ error_message }}</strong></p>
 	{% endif %}
-
-	<form action="{% url 'vote' question.id %}" method="post">
-		{% csrf_token %}
-			{% for choice in question.choice_set.all %}
-				<label class='radio radio-blue' for="choice{{ forloop.counter }}">
-				 <input type="radio" name="choice" id="choice{{ forloop.counter }}" 	value="{{ choice.id }}" data-toggle='radio'/>
-	 	  		{{ choice.choice_text }}
-				</label>
-			{% endfor %}
-		<button type='submit' class='btn btn-blue' value="Vote">vote!</button>
-	</form>
+	<div class=row>
+		<div class='col-sm-6 col-md-4 col-md-offset-4'>
+			<form action="{% url 'vote' question.id %}" method="post">
+				{% csrf_token %}
+					{% for choice in question.choice_set.all %}
+						<label class='radio radio-blue' for="choice{{ forloop.counter }}">
+						 <input type="radio" name="choice" id="choice{{ forloop.counter }}" 	value="{{ choice.id }}" data-toggle='radio'/>
+			 	  		{{ choice.choice_text }}
+						</label>
+					{% endfor %}
+				<button type='submit' class='btn btn-blue' value="Vote">vote!</button>
+			</form>
+		<div>
+	</div>
 </div>
 
 
