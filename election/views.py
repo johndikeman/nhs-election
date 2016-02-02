@@ -5,13 +5,15 @@ from django.core.urlresolvers import reverse
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from .models import Question, Choice
-# Create your views here.
 
 @login_required
 def index(request):
     template = loader.get_template('polls/index.html')
-
-    context = {'questions':Question.objects.order_by('-pub_date')[:5]}
+    questions = []
+    for question in Question.objects.order_by('-pub_date'):
+        if question not in request.user.student.answeredQuestions.all() and (question.spec == 'any' or question.spec == request.user.student.category):
+            questions.append(question)
+    context = {'questions':questions}
     return render(request,'polls/index.html',context)
 
 @login_required
@@ -31,9 +33,6 @@ def vote(request,question_id):
             selected_choice.save()
             request.user.student.answeredQuestions.add(question)
             request.user.student.save()
-            # Always return an HttpResponseRedirect after successfully dealing
-            # with POST data. This prevents data from being posted twice if a
-            # user hits the Back button.
             return HttpResponseRedirect(reverse('index'))
         else:
             return HttpResponseRedirect(reverse('index'))
@@ -43,17 +42,18 @@ def detail(request,question_id):
     question = get_object_or_404(Question,pk=question_id)
     return render(request,'polls/detail.html',{'question':question,'user':request.user})
 
-def logon_page(request):
-    username, password = request.POST['username'],request.POST['password']
-    user = authenticate(username=username,password=password)
-    if user is not None:
-        print user.student
-        login(request,user)
-
-    return HttpResponseRedirect(reverse('index'))
-
 def login_page(request):
-    return render(request,'polls/login.html')
+    if request.method == 'POST':
+        username, password = request.POST['username'],request.POST['password']
+        user = authenticate(username=username,password=password)
+        if user is not None:
+            login(request,user)
+            return HttpResponseRedirect(reverse('index'))
+        else:
+            return render(request,'polls/login.html',context={'error':'that username/password combo didn\'t work, boss.'})
+
+    if request.method == 'GET':
+        return render(request,'polls/login.html',context={'error':None})
 
 
 def logout_page(request):

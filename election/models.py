@@ -3,12 +3,15 @@ from __future__ import unicode_literals
 from django.db import models
 from django.contrib.auth.models import User
 
+cat = [('band','Band'),('athletics','Athletics'),('debate','Debate'),('art','Art')]
+
 class Question(models.Model):
     question_text = models.CharField(max_length=200)
     pub_date = models.DateTimeField('date published')
+    spec = models.CharField(max_length=25, choices=(cat+[('any','any')]),default='any')
 
     def __str__(self):
-        return 'Question: %s' % self.question_text
+        return 'Question for %s: %s' % (self.spec,self.question_text)
 
 class Choice(models.Model):
     question = models.ForeignKey(Question, on_delete=models.CASCADE)
@@ -20,8 +23,8 @@ class Choice(models.Model):
 
 class Student(models.Model):
     user = models.OneToOneField(User,on_delete=models.CASCADE)
-    category = models.CharField(max_length=10,choices=[('band','Band'),('athletics','Athletics'),('debate','Debate'),('art','Art')])
-    answeredQuestions = models.ManyToManyField(Question)
+    category = models.CharField(max_length=10,choices=cat)
+    answeredQuestions = models.ManyToManyField(Question,blank=True)
 
     def __str__(self):
         return '%s, in the category %s' % (self.user.username,self.category)
