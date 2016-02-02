@@ -42,6 +42,13 @@ def detail(request,question_id):
     question = get_object_or_404(Question,pk=question_id)
     return render(request,'polls/detail.html',{'question':question,'user':request.user})
 
+@login_required
+def results(request):
+    return render(request,'polls/results.html',{'questions':Question.objects.order_by('-pub_date')})
+
+def results_api(request,id):
+    return HttpResponse('ass')
+
 def login_page(request):
     if request.method == 'POST':
         username, password = request.POST['username'],request.POST['password']
