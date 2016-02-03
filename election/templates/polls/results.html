@@ -62,23 +62,9 @@
 
 <canvas id='chart' width='400' height='400'></canvas>
 <script>
-  var data = {
-    labels: ['testing', 'again'],
-    datasets: [
-        {
-            label: "My First dataset",
-            fillColor: "rgba(220,220,220,0.2)",
-            strokeColor: "rgba(220,220,220,1)",
-            pointColor: "rgba(220,220,220,1)",
-            pointStrokeColor: "#fff",
-            pointHighlightFill: "#fff",
-            pointHighlightStroke: "rgba(220,220,220,1)",
-            data: [65, 59]
-        }]
-  }
+  var data = {{graph_data|safe}}
   var ctx = $("#chart").get(0).getContext("2d")
   var myNewChart = new Chart(ctx).Bar(data)
-
 </script>
 
 
@@ -99,7 +85,6 @@
 	<script src="{% static 'election/assets/js/ct-paper-radio.js' %}"></script>
 	<script src="{% static 'election/assets/js/bootstrap-select.js' %}"></script>
 	<script src="{% static 'election/assets/js/bootstrap-datepicker.js' %}"></script>
-    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?v=3.exp"></script>
-
+  <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?v=3.exp"></script>
 	<script src="{% static 'election/assets/js/ct-paper.js' %}"></script>
 </html>

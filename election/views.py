@@ -5,6 +5,7 @@ from django.core.urlresolvers import reverse
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from .models import Question, Choice
+import json
 
 @login_required
 def index(request):
@@ -43,8 +44,32 @@ def detail(request,question_id):
     return render(request,'polls/detail.html',{'question':question,'user':request.user})
 
 @login_required
-def results(request):
-    return render(request,'polls/results.html',{'questions':Question.objects.order_by('-pub_date')})
+def results(request,id):
+    labels = []
+    data = []
+    question = get_object_or_404(Question,pk=id)
+    for a in question.choice_set.all():
+        labels.append(a.choice_text)
+        data.append(a.votes)
+    fin = {
+        'labels':labels,
+        'datasets':
+            [
+                {
+                    'label': 'a results graph',
+                    'fillColor': "rgba(220,220,220,0.2)",
+                    'strokeColor': "rgba(220,220,220,1)",
+                    'pointColor': "rgba(220,220,220,1)",
+                    'pointStrokeColor': "#fff",
+                    'pointHighlightFill': "#fff",
+                    'pointHighlightStroke': "rgba(220,220,220,1)",
+                    'data': data
+                }
+            ],
+
+    }
+
+    return render(request,'polls/results.html',{'graph_data':json.dumps(fin)})
 
 def results_api(request,id):
     return HttpResponse('ass')
