@@ -10,11 +10,11 @@ import json
 @login_required
 def index(request):
     template = loader.get_template('polls/index.html')
-    questions = []
-    for question in Question.objects.order_by('-pub_date'):
-        if question not in request.user.student.answeredQuestions.all() and (question.spec == 'any' or question.spec == request.user.student.category):
-            questions.append(question)
-    context = {'questions':questions}
+    q = []
+    for a in Question.objects.order_by('-pub_date'):
+        q.append((a,request.user.student.can_vote_on(a)))
+
+    context = {'questions':q}
     return render(request,'polls/index.html',context)
 
 @login_required
@@ -57,8 +57,8 @@ def results(request,id):
             [
                 {
                     'label': 'a results graph',
-                    'fillColor': "rgba(220,220,220,0.2)",
-                    'strokeColor': "rgba(220,220,220,1)",
+                    'fillColor': "rgba(102,97,91,0.2)",
+                    'strokeColor': "rgba(102,97,91,1)",
                     'pointColor': "rgba(220,220,220,1)",
                     'pointStrokeColor': "#fff",
                     'pointHighlightFill': "#fff",

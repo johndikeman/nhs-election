@@ -46,12 +46,6 @@
           <ul class="nav navbar-nav navbar-right">
                 <a href='{% url "logout" %}' class="btn btn-simple">logout</a>
                 <a href="{% url 'index' %}" class="btn btn-simple">polls</a>
-                <div class=dropdown>
-                  <button class='btn dropdown-toggle' type=button id=dropdownMenu1 data-toggle=dropdown>choose a question</button>
-                  <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
-                  {% for a in questions %}
-                    <li role='presentation'><a role=menuitem tabindex="-1" href="{% url 'results_api' id=a.id %}">{{ a.question_text }}</a></li>
-                  {% endfor %}
            </ul>
         </div><!-- /.navbar-collapse -->
       </div><!-- /.container-->
@@ -59,8 +53,9 @@
 
 
 <!-- end navbar  -->
-
-<canvas id='chart' width='400' height='400'></canvas>
+<div class='container text-center'>
+	<canvas id='chart' width='400' height='400'></canvas>
+</div>
 <script>
   var data = {{graph_data|safe}}
   var ctx = $("#chart").get(0).getContext("2d")

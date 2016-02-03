@@ -26,5 +26,11 @@ class Student(models.Model):
     category = models.CharField(max_length=10,choices=cat)
     answeredQuestions = models.ManyToManyField(Question,blank=True)
 
+    def can_vote_on(self,question):
+        if question not in self.answeredQuestions.all():
+            if (question.spec == 'any' or question.spec == self.category):
+                return True
+        return False
+
     def __str__(self):
         return '%s, in the category %s' % (self.user.username,self.category)
