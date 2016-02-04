@@ -21,8 +21,9 @@ class Question(models.Model):
         print now()
         if self.is_finished:
             return (0,0)
-        tim = ((self.pub_date + timedelta(hours=question.time_limit)) - now())
-        return (tim.days,tim.hours)
+        tim = ((self.pub_date + timedelta(hours=self.time_limit)) - now())
+
+        return (tim.days,tim.seconds)
 
     def __str__(self):
         return 'Question for %s: %s' % (self.spec,self.question_text)
@@ -42,18 +43,6 @@ class Student(models.Model):
 
     def can_vote_on(self,question):
         if question.is_finished:
-            return False
-
-        if (question.pub_date + timedelta(hours=question.time_limit)) > now():
-            question.is_finished = True
-            vote_max = 0
-            winning_object = question.choice_set.all()[0]
-            for a in question.choice_set.all():
-                if a.votes > vote_max:
-                    vote_max = a.votes
-                    winning_object = a
-            question.winner = winning_object.choice_text
-            question.save()
             return False
 
         if question not in self.answeredQuestions.all():
